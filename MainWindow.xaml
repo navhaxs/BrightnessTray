@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BrightnessTray"
+        mc:Ignorable="d"
+        x:Class="BrightnessTray.MainWindow"
+        Title="Brightness" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" WindowStyle="None"
+        SnapsToDevicePixels="True" Topmost="True" Deactivated="Window_Deactivated" Activated="Window_Activated"
+        Loaded="Window_Loaded" ShowInTaskbar="False" Background="Transparent"
+        Closing="Window_Closing" GotKeyboardFocus="Window_GotKeyboardFocus" PreviewMouseWheel="Window_PreviewMouseWheel"
+        FocusManager.FocusedElement="{Binding ElementName=BrightnessSlider}" Icon="res/sun.ico" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
+    <Window.Resources>
+
+        <!-- Window border styles -->
+        <Style x:Key="AeroBorderStyle" TargetType="{x:Type Window}">
+            <Setter Property="ResizeMode" Value="CanResize" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style x:Key="ClassicBorderStyle" TargetType="{x:Type Window}">
+            <Setter Property="ResizeMode" Value="NoResize" />
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <!-- InactiveCaptionBrushKey actually refers to the colour of an inactive window's title bar, but it's probably the best colour we have -->
+        <Style x:Key="ClassicBorderStyleInactive" TargetType="{x:Type Window}" BasedOn="{StaticResource ClassicBorderStyle}">
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" />
+        </Style>
+
+        <Style x:Key="AeroBorderFixStyle" TargetType="{x:Type Border}">
+            <Setter Property="Margin" Value="1" />
+        </Style>
+
+    </Window.Resources>
+
+    <Border x:Name="WindowBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Style="{StaticResource AeroBorderFixStyle}">
+        <StackPanel Margin="0,15,0,0">
+            <Image x:Name="image" Height="22" Width="22"
+                   Source="res/sun.png"
+                   />
+            <Slider x:Name="BrightnessSlider" Orientation="Vertical" Height="200" HorizontalAlignment="Center" Margin="0,15,0,0" TickPlacement="Both" TickFrequency="10" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="1" LargeChange="10">
+                <Slider.Style>
+                    <Style TargetType="Slider">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    </Style>
+                </Slider.Style>
+            </Slider>
+            <Border BorderBrush="#FFDBDBDB" BorderThickness="0,1,0,0" Background="#FFF6F6F6" Padding="15" Margin="0,15,0,0">
+                <StackPanel>
+                    <TextBlock VerticalAlignment="Bottom" d:LayoutOverrides="Width" ><Hyperlink TextDecorations="{x:Null}" Click="Hyperlink_Click"><Run Text="Turn off monitor"/></Hyperlink></TextBlock>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+    </Border>
+
+</Window>
