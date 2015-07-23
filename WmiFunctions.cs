@@ -50,6 +50,11 @@ namespace BrightnessTray
                 moc.Dispose();
                 mos.Dispose();
             }
+            catch (ManagementException ex)
+            {
+                // ignore
+                // it is possible that laptop lid is closed, and using external monitor
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
@@ -91,6 +96,11 @@ namespace BrightnessTray
 
                 moc.Dispose();
                 mos.Dispose();
+            }
+            catch (ManagementException ex)
+            {
+                // ignore
+                // it is possible that laptop lid is closed, and using external monitor
             }
             catch (Exception ex)
             {

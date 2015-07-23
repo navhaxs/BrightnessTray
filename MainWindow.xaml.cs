@@ -370,12 +370,7 @@ namespace BrightnessTray
         /// <param name="e">Event arguments.</param>
         private void Window_Deactivated(object sender, EventArgs e)
         {
-#if !DEBUG
             this.HideWindow();
-#endif
-
-            //if (!Compatibility.IsDWMEnabled)
-            //    this.SetNonGlassBorder(false);
         }
 
         /// <summary>

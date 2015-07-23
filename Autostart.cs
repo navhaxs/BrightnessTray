@@ -59,8 +59,6 @@ namespace BrightnessTray
             {
                 string shortcutTargetFile = GetShortcutTargetFile(fi.FullName);
 
-                System.Diagnostics.Debug.Print(shortcutTargetFile);
-
                 if (shortcutTargetFile.Equals(searchFile,
                       StringComparison.InvariantCultureIgnoreCase))
                 {
