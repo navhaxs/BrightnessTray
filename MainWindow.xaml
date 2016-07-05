@@ -39,9 +39,10 @@
     <Border x:Name="WindowBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Style="{StaticResource AeroBorderFixStyle}">
         <StackPanel Margin="0,15,0,0">
             <Image x:Name="image" Height="22" Width="22"
-                   Source="res/sun.png"
+                   Source="res/sun.png" Margin="0,0,0,10"
                    />
-            <Slider x:Name="BrightnessSlider" Orientation="Vertical" Height="200" HorizontalAlignment="Center" Margin="0,15,0,0" TickPlacement="Both" TickFrequency="10" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="1" LargeChange="10">
+            <Label x:Name="percentageLabel" Content="0%" Margin="0,0,0,10" HorizontalAlignment="Center" Padding="0,0,0,5"/>
+            <Slider x:Name="BrightnessSlider" Orientation="Vertical" Height="200" HorizontalAlignment="Center" TickPlacement="Both" TickFrequency="10" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="1" LargeChange="10">
                 <Slider.Style>
                     <Style TargetType="Slider">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

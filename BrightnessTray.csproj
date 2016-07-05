@@ -106,6 +106,8 @@
     </ApplicationDefinition>
     <Compile Include="Autostart.cs" />
     <Compile Include="Caffeine.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="DrawIcon.cs" />
     <Compile Include="MonitorOff.cs" />
     <Compile Include="EventWatcherAsync.cs" />
     <Compile Include="WindowPositioning.cs" />

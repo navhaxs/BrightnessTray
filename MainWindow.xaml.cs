@@ -53,6 +53,10 @@ namespace BrightnessTray
 
             this.Visibility = Visibility.Hidden;
 
+            if (!Config.showPercentageText)
+            {
+                percentageLabel.Visibility = Visibility.Hidden;
+            }
         }
 
         /// <summary>
@@ -67,11 +71,19 @@ namespace BrightnessTray
             // This helps keep the slider free of being jerky when the user is moving it.
 
             // e.g. ignore if the user is dragging the slider, or using the scroll wheel on the slider, or up/down keys on the slider.
-            if (!this.IsMouseOver && !this.isKeyDown)
+            // needs to be IsMouseOver for entire form in case of scroll wheel.
+            if (!IsMouseOver && !isKeyDown)
             {
                 this.Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    this.BrightnessSlider.Value = int.Parse(e.newBrightness.ToString());
+                    int value = int.Parse(e.newBrightness.ToString());
+
+                    // 0 <= value <= 100
+
+                    this.BrightnessSlider.Value = value;
+                    this.percentageLabel.Content = value.ToString() + "%";
+                    DrawIcon.updateNotifyIcon(NotifyIcon, value);
+
                 }));
             }
         }
@@ -517,6 +529,8 @@ namespace BrightnessTray
             notifyicon.MouseDoubleClick += this.NotifyIconClick;
 
             notifyicon.Visible = true;
+            
+            DrawIcon.updateNotifyIcon(notifyicon, 100);
 
             this.NotifyIcon = notifyicon;
         }
@@ -602,7 +616,10 @@ namespace BrightnessTray
             {
                 WmiFunctions.SetBrightnessLevel((int) newBrightness);
 
-            }).Start(); 
+            }).Start();
+
+            this.percentageLabel.Content = newBrightness.ToString() + "%";
+            DrawIcon.updateNotifyIcon(NotifyIcon, newBrightness);
         }
 
         private void Window_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -625,5 +642,6 @@ namespace BrightnessTray
         {
             isKeyDown = true;
         }
+
     }
 }
