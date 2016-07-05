@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+/*
+ * Credit: NineBerry https://stackoverflow.com/q/36379547/
+ */
+
 namespace BrightnessTray
 {
     class DrawIcon
@@ -16,11 +20,22 @@ namespace BrightnessTray
             {
                 return;
             }
-            
-            Font fontToUse = new Font("Tahoma", 11, FontStyle.Regular, GraphicsUnit.Pixel);
+
+            string drawMe = percentage.ToString();
+
+            Font fontToUse;
+            if (percentage == 100)
+            {
+                // reduce size to fit "100"
+                fontToUse = new Font("Tahoma", 20, FontStyle.Regular, GraphicsUnit.Pixel);
+            } else
+            {
+                fontToUse = new Font("Tahoma", 24, FontStyle.Regular, GraphicsUnit.Pixel);
+            }
+
             Brush brushToUse = new SolidBrush(Color.White);
-            Rectangle rect = new Rectangle(0, 0, 16, 16);
-            Bitmap bitmapText = new Bitmap(16, 16);
+            Rectangle rect = new Rectangle(-6, 2, 42, 32);
+            Bitmap bitmapText = new Bitmap(32, 32);
             Graphics g = Graphics.FromImage(bitmapText);
             IntPtr hIcon;
             g.Clear(System.Drawing.Color.Transparent);
@@ -28,7 +43,7 @@ namespace BrightnessTray
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
             sf.LineAlignment = StringAlignment.Center;
-            g.DrawString(percentage.ToString(), fontToUse, brushToUse, rect, sf);
+            g.DrawString(drawMe, fontToUse, brushToUse, rect, sf);
 
             hIcon = (bitmapText.GetHicon());
 

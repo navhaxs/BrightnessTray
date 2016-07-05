@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("navhaxs.au.eu.org")]
 [assembly: AssemblyProduct("BrightnessTray")]
-[assembly: AssemblyCopyright("Copyright © Jeremy Wong 2015")]
+[assembly: AssemblyCopyright("Copyright © Jeremy Wong 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
