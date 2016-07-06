@@ -1178,7 +1178,6 @@ namespace BrightnessTray
             public int cyBottomHeight;
         }
 
-
         // Import SetThreadExecutionState Win32 API and necessary flags
         [DllImport("kernel32.dll")]
         public static extern uint SetThreadExecutionState(uint esFlags);

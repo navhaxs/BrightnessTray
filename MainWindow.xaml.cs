@@ -55,7 +55,7 @@ namespace BrightnessTray
 
             if (!Config.showPercentageText)
             {
-                percentageLabel.Visibility = Visibility.Hidden;
+                percentageLabel.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -497,12 +497,6 @@ namespace BrightnessTray
     
             notifyicon = new System.Windows.Forms.NotifyIcon();
             var currentBrightness = WmiFunctions.GetBrightnessLevel();
-            notifyicon.Text = "Brightness " + currentBrightness + "%";
-
-            // set icon
-            Stream iconstream = Application.GetResourceStream(new Uri("pack://application:,,,/BrightnessTray;component/res/sun.ico")).Stream;
-            notifyicon.Icon = new System.Drawing.Icon(iconstream, System.Windows.Forms.SystemInformation.SmallIconSize);
-            iconstream.Close();
 
             //System.Windows.Forms.MenuItem mnuPin = new System.Windows.Forms.MenuItem("Pin", new EventHandler(this.PinMenuEventHandler));
             System.Windows.Forms.MenuItem mnuMonitorOff = new System.Windows.Forms.MenuItem("Power off display", new EventHandler(this.MonitorOffMenuEventHandler));
@@ -530,7 +524,7 @@ namespace BrightnessTray
 
             notifyicon.Visible = true;
             
-            DrawIcon.updateNotifyIcon(notifyicon, 100);
+            DrawIcon.updateNotifyIcon(notifyicon, currentBrightness);
 
             this.NotifyIcon = notifyicon;
         }
