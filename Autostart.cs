@@ -41,8 +41,8 @@ namespace BrightnessTray
 
           shortcut.TargetPath = Application.ExecutablePath;
           shortcut.WorkingDirectory = Application.StartupPath;
-          shortcut.Description = "Launch My Application";
-          // shortcut.IconLocation = Application.StartupPath + @"\App.ico";
+          shortcut.Description = "Launch BrightnessTray";
+          shortcut.Arguments = String.Join(" ", Environment.GetCommandLineArgs());
           shortcut.Save();
         }
 
