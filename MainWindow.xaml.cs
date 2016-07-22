@@ -407,7 +407,7 @@ namespace BrightnessTray
         /// <param name="e">Cancel event arguments.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            eventWatcher.stop();
+            eventWatcher.Dispose();
 
             // remove the notify icon
             this.NotifyIcon.Visible = false;

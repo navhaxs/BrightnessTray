@@ -20,7 +20,7 @@ using System.Management;
 
 namespace BrightnessTray
 {
-    public class EventWatcherAsync
+    public class EventWatcherAsync : IDisposable
     {
 
         public event EventHandler<BrightnessChangedEventArgs> BrightnessChanged;
@@ -86,18 +86,14 @@ namespace BrightnessTray
 
         }
 
-        // todo: how to dispose nicely?
-        public void stop()
+        public void Dispose()
         {
-            try
+            if (Watcher != null)
             {
                 Watcher.Stop();
             }
-            finally
-            {
 
-            }
+            Watcher.Dispose();
         }
-
     }
 }
