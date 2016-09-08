@@ -541,7 +541,9 @@ namespace BrightnessTray
             if (NativeMethods.GetCursorPos(out result))
                 return result;
             else
-                throw new Exception("Failed to retrieve mouse position");
+                // Failed to retrieve mouse position
+                // Simply return (0,0) to continue instead of crashing
+                return new Point(0,0);
         }
 
         /// <summary>
