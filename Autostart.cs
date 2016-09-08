@@ -18,32 +18,35 @@
 */
 using System;
 using IWshRuntimeLibrary;
-using Shell32;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 
 namespace BrightnessTray
 {
     static class Autostart
     {
+
+        const string PRODUCT_NAME = "BrightnessTray";
+
         public static void CreateStartupFolderShortcut()
         {
-          WshShellClass wshShell = new WshShellClass();
-          IWshRuntimeLibrary.IWshShortcut shortcut;
-          string startUpFolderPath = 
-            Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            WshShellClass wshShell = new WshShellClass();
+            IWshRuntimeLibrary.IWshShortcut shortcut;
+            string startUpFolderPath =
+              Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
-          // Create the shortcut
-          shortcut = 
-            (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
-              startUpFolderPath + "\\" + 
-              Application.ProductName + ".lnk");
+            // Create the shortcut
+            shortcut =
+              (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(
+                startUpFolderPath + "\\" +
+                PRODUCT_NAME + ".lnk");
 
-          shortcut.TargetPath = Application.ExecutablePath;
-          shortcut.WorkingDirectory = Application.StartupPath;
-          shortcut.Description = "Launch BrightnessTray";
-          shortcut.Arguments = String.Join(" ", Environment.GetCommandLineArgs());
-          shortcut.Save();
+            shortcut.TargetPath = Application.ExecutablePath;
+            shortcut.WorkingDirectory = Application.StartupPath;
+            shortcut.Description = "Launch BrightnessTray";
+            shortcut.Arguments = String.Join(" ", Environment.GetCommandLineArgs().Skip(1));
+            shortcut.Save();
         }
 
         public static string GetShortcutTargetFile(string shortcutFilename)
