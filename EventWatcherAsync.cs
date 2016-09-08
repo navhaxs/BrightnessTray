@@ -17,6 +17,7 @@
 */
 using System;
 using System.Management;
+using Microsoft.Win32;
 
 namespace BrightnessTray
 {
@@ -54,6 +55,9 @@ namespace BrightnessTray
         {
             try
             {
+                SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
+
+                //register WMI event listener
                 string ComputerName = "localhost";
                 string WmiQuery;
                 ManagementScope Scope;
@@ -84,6 +88,12 @@ namespace BrightnessTray
                 Console.WriteLine("Exception {0} Trace {1}", e.Message, e.StackTrace);
             }
 
+        }
+
+
+        void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
         }
 
         public void Dispose()
