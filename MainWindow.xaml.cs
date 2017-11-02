@@ -603,6 +603,9 @@ namespace BrightnessTray
         /// </summary>
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (this.Visibility != Visibility.Visible)
+                return;
+
             var newBrightness = (int) e.NewValue;
 
             // Change the brightness in a background thread to avoid UI blocking
