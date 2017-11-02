@@ -116,9 +116,9 @@ namespace BrightnessTray
         private UserPreferenceChangedEventHandler PreferenceEventHandler { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not we are currently blocking sleep mode 'Caffiene'.
+        /// Gets or sets a value indicating whether or not we are currently blocking sleep mode 'Caffeine'.
         /// </summary>
-        private bool CaffieneEnabled { get; set; }
+        private bool CaffeineEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the window's notify icon.
@@ -501,7 +501,7 @@ namespace BrightnessTray
             //System.Windows.Forms.MenuItem mnuPin = new System.Windows.Forms.MenuItem("Pin", new EventHandler(this.PinMenuEventHandler));
             System.Windows.Forms.MenuItem mnuMonitorOff = new System.Windows.Forms.MenuItem("Power off display", new EventHandler(this.MonitorOffMenuEventHandler));
             System.Windows.Forms.MenuItem mnuSleep = new System.Windows.Forms.MenuItem("Enter sleep mode", new EventHandler(this.SleepMenuEventHandler));
-            System.Windows.Forms.MenuItem mnuCaffiene = new System.Windows.Forms.MenuItem("Caffiene", new EventHandler(this.CaffieneMenuEventHandler));
+            System.Windows.Forms.MenuItem mnuCaffeine = new System.Windows.Forms.MenuItem("Caffiene", new EventHandler(this.CaffeineMenuEventHandler));
             mnuAutostart = new System.Windows.Forms.MenuItem("Autostart", new EventHandler(this.AutostartMenuEventHandler));
             mnuAutostart.Checked = Autostart.CheckStartupFolderShortcutsExists();
 
@@ -511,7 +511,7 @@ namespace BrightnessTray
 
             System.Windows.Forms.MenuItem[] menuitems = new System.Windows.Forms.MenuItem[]
             {
-                mnuLabel, new System.Windows.Forms.MenuItem("-"), mnuMonitorOff, mnuSleep, new System.Windows.Forms.MenuItem("-"), mnuCaffiene, new System.Windows.Forms.MenuItem("-"), mnuAutostart, new System.Windows.Forms.MenuItem("-"), mnuExit
+                mnuLabel, new System.Windows.Forms.MenuItem("-"), mnuMonitorOff, mnuSleep, new System.Windows.Forms.MenuItem("-"), mnuCaffeine, new System.Windows.Forms.MenuItem("-"), mnuAutostart, new System.Windows.Forms.MenuItem("-"), mnuExit
             };
 
             System.Windows.Forms.ContextMenu contextmenu = new System.Windows.Forms.ContextMenu(menuitems);
@@ -551,7 +551,7 @@ namespace BrightnessTray
             mnuLabel.Text = "Brightness: " + currentBrightness + "%";
         }
 
-        private void CaffieneMenuEventHandler(object sender, EventArgs e)
+        private void CaffeineMenuEventHandler(object sender, EventArgs e)
         {
             System.Windows.Forms.MenuItem menuitem = sender as System.Windows.Forms.MenuItem;
             if (menuitem != null) {
