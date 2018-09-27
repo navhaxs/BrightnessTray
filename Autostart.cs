@@ -59,9 +59,17 @@ namespace BrightnessTray
             Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
             if (folderItem != null)
             {
-                Shell32.ShellLinkObject link =
-                  (Shell32.ShellLinkObject)folderItem.GetLink;
-                return link.Path;
+                try
+                {
+                    Shell32.ShellLinkObject link =
+                        (Shell32.ShellLinkObject) folderItem.GetLink;
+                    return link.Path;
+                }
+                catch (Exception e)
+                {
+                    return string.Empty;
+                }
+                
             }
 
             return string.Empty; // Not found
