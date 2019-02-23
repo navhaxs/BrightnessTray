@@ -46,7 +46,7 @@ namespace BrightnessTray
             PreferenceEvent = null;
 
             // set up listener for brightness changed events
-            eventWatcher = new EventWatcherAsync();
+            eventWatcher = new BrightnessWatcher();
             eventWatcher.BrightnessChanged += EventWatcher_BrightnessChanged;
 
             CreateNotifyIcon();
@@ -62,7 +62,7 @@ namespace BrightnessTray
         /// <summary>
         /// Update the slider due to a brightness changed event.
         /// </summary>
-        private void EventWatcher_BrightnessChanged(object sender, EventWatcherAsync.BrightnessChangedEventArgs e)
+        private void EventWatcher_BrightnessChanged(object sender, BrightnessWatcher.BrightnessChangedEventArgs e)
         {
             NotifyIcon.Text = "Brightness " + e.newBrightness.ToString() + "%";
 
@@ -96,7 +96,7 @@ namespace BrightnessTray
         /// <summary>
         /// Listener to backlight change events from WMI.
         /// </summary>
-        EventWatcherAsync eventWatcher;
+        BrightnessWatcher eventWatcher;
         
         /// <summary>
         /// Delegate for handling user preference changes (namely desktop preference changes).

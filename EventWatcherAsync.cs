@@ -17,13 +17,11 @@
 */
 using System;
 using System.Management;
-using Microsoft.Win32;
 
 namespace BrightnessTray
 {
-    public class EventWatcherAsync : IDisposable
+    public class BrightnessWatcher : IDisposable
     {
-
         public event EventHandler<BrightnessChangedEventArgs> BrightnessChanged;
 
         public class BrightnessChangedEventArgs : EventArgs
@@ -49,39 +47,18 @@ namespace BrightnessTray
             }
         }
 
-        ManagementEventWatcher Watcher;
+        private readonly ManagementEventWatcher _watcher;
 
-        public EventWatcherAsync()
+        public BrightnessWatcher()
         {
             try
             {
-                SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_SessionEnding);
-
                 //register WMI event listener
-                string ComputerName = "localhost";
-                string WmiQuery;
-                ManagementScope Scope;
-
-
-                if (!ComputerName.Equals("localhost", StringComparison.OrdinalIgnoreCase))
-                {
-                    ConnectionOptions Conn = new ConnectionOptions();
-                    Conn.Username = "";
-                    Conn.Password = "";
-                    Conn.Authority = "ntlmdomain:DOMAIN";
-                    Scope = new ManagementScope(String.Format("\\\\{0}\\root\\WMI", ComputerName), Conn);
-                }
-                else
-                    Scope = new ManagementScope(String.Format("\\\\{0}\\root\\WMI", ComputerName), null);
-                Scope.Connect();
-
-                WmiQuery = "Select * From WmiMonitorBrightnessEvent";
-
-                Watcher = new ManagementEventWatcher(Scope, new EventQuery(WmiQuery));
-                Watcher.EventArrived += new EventArrivedEventHandler(this.WmiEventHandler);
-                Watcher.Start();
-                //Console.Read();
-                //Watcher.Stop();
+                var scope = @"root\wmi";
+                var query = "SELECT * FROM WmiMonitorBrightnessEvent";
+                _watcher = new ManagementEventWatcher(scope, query);
+                _watcher.EventArrived += new EventArrivedEventHandler(WmiEventHandler);
+                _watcher.Start();
             }
             catch (Exception e)
             {
@@ -90,20 +67,14 @@ namespace BrightnessTray
 
         }
 
-
-        void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
-
         public void Dispose()
         {
-            if (Watcher != null)
+            if (_watcher != null)
             {
-                Watcher.Stop();
+                _watcher.Stop();
             }
 
-            Watcher.Dispose();
+            _watcher.Dispose();
         }
     }
 }
