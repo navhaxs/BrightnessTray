@@ -624,9 +624,9 @@ namespace BrightnessTray
             BrightnessSlider.Focus();
         }
 
-        private void Window_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            BrightnessSlider.Value += e.Delta / 120;
+            BrightnessSlider.Value += e.Delta / 60;
             e.Handled = true;
         }
 

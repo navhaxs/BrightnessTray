@@ -9,7 +9,7 @@
         Title="Brightness" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" WindowStyle="None"
         SnapsToDevicePixels="True" Topmost="True" Deactivated="Window_Deactivated" Activated="Window_Activated"
         Loaded="Window_Loaded" ShowInTaskbar="False" Background="Transparent"
-        Closing="Window_Closing" GotKeyboardFocus="Window_GotKeyboardFocus" PreviewMouseWheel="Window_PreviewMouseWheel"
+        Closing="Window_Closing" GotKeyboardFocus="Window_GotKeyboardFocus" MouseWheel="Window_MouseWheel"
         FocusManager.FocusedElement="{Binding ElementName=BrightnessSlider}" Icon="res/sun.ico" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
     <Window.Resources>
 
