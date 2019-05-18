@@ -15,6 +15,7 @@
     along with BrightnessTray.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -26,14 +27,25 @@ namespace BrightnessTray
 
         private static int WM_SYSCOMMAND = 0x0112;
         private static int SC_MONITORPOWER = 0xF170;
+        private static int SC_SCREENSAVE = 0xF140;
 
         [DllImport("user32.dll")]
         private static extern int SendMessage(int hWnd, int hMsg, int wParam, int lParam);
 
         public static void TurnOffMonitor(Window wnd)
         {
-            WindowInteropHelper windowHwnd = new WindowInteropHelper(wnd);
-            SendMessage(windowHwnd.Handle.ToInt32(), WM_SYSCOMMAND, SC_MONITORPOWER, 2);
+            WindowInteropHelper helper = new WindowInteropHelper(wnd);
+            helper.EnsureHandle();
+
+            SendMessage(helper.Handle.ToInt32(), WM_SYSCOMMAND, SC_MONITORPOWER, 2);
+        }
+
+        public static void StartScreenSaver(Window wnd)
+        {
+            WindowInteropHelper helper = new WindowInteropHelper(wnd);
+            helper.EnsureHandle();
+
+            SendMessage(helper.Handle.ToInt32(), WM_SYSCOMMAND, SC_SCREENSAVE, 2);
         }
     }
 }

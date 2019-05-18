@@ -18,7 +18,6 @@
 namespace BrightnessTray
 {
     using System;
-    using System.IO;
     using System.Threading;
     using System.Windows;
     using System.Windows.Input;
@@ -228,19 +227,6 @@ namespace BrightnessTray
         }
 
         #region Event Handlers
-
-        /// <summary>
-        /// Adds hook to custom DefWindowProc function.
-        /// </summary>
-        /// <param name="e">OnSourceInitialized EventArgs.</param>
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-
-            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-            source.AddHook(this.WndProc);
-        }
-
         /// <summary>
         /// Custom DefWindowProc function used to disable resize and update the window appearance when the window size is changed or the DWM is enabled/disabled.
         /// </summary>
@@ -486,6 +472,8 @@ namespace BrightnessTray
         {
             this.UpdateWindowDisplay(false);
 
+            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            source.AddHook(this.WndProc);    
         }
 
         /// <summary>
@@ -500,6 +488,7 @@ namespace BrightnessTray
 
             //System.Windows.Forms.MenuItem mnuPin = new System.Windows.Forms.MenuItem("Pin", new EventHandler(this.PinMenuEventHandler));
             System.Windows.Forms.MenuItem mnuMonitorOff = new System.Windows.Forms.MenuItem("Power off display", new EventHandler(this.MonitorOffMenuEventHandler));
+            System.Windows.Forms.MenuItem mnuScreenSaver = new System.Windows.Forms.MenuItem("Start screen saver", new EventHandler(this.StartScreenSaverMenuEventHandler));
             System.Windows.Forms.MenuItem mnuSleep = new System.Windows.Forms.MenuItem("Enter sleep mode", new EventHandler(this.SleepMenuEventHandler));
             System.Windows.Forms.MenuItem mnuCaffeine = new System.Windows.Forms.MenuItem("Caffiene", new EventHandler(this.CaffeineMenuEventHandler));
             mnuAutostart = new System.Windows.Forms.MenuItem("Autostart", new EventHandler(this.AutostartMenuEventHandler));
@@ -511,7 +500,7 @@ namespace BrightnessTray
 
             System.Windows.Forms.MenuItem[] menuitems = new System.Windows.Forms.MenuItem[]
             {
-                mnuLabel, new System.Windows.Forms.MenuItem("-"), mnuMonitorOff, mnuSleep, new System.Windows.Forms.MenuItem("-"), mnuCaffeine, new System.Windows.Forms.MenuItem("-"), mnuAutostart, new System.Windows.Forms.MenuItem("-"), mnuExit
+                mnuLabel, new System.Windows.Forms.MenuItem("-"), mnuMonitorOff, mnuScreenSaver, mnuSleep, new System.Windows.Forms.MenuItem("-"), mnuCaffeine, new System.Windows.Forms.MenuItem("-"), mnuAutostart, new System.Windows.Forms.MenuItem("-"), mnuExit
             };
 
             System.Windows.Forms.ContextMenu contextmenu = new System.Windows.Forms.ContextMenu(menuitems);
@@ -572,9 +561,12 @@ namespace BrightnessTray
         private void MonitorOffMenuEventHandler(object sender, EventArgs e)
         {
             MonitorOff.TurnOffMonitor(this);
-
         }
 
+        private void StartScreenSaverMenuEventHandler(object sender, EventArgs e)
+        {
+            MonitorOff.StartScreenSaver(this);
+        }
 
         /// <summary>
         /// Hyperlink clicked method.
