@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -14,6 +11,32 @@ namespace BrightnessTray
 {
     class DrawIcon
     {
+        const string INI_FILE = "BrightnessTray.ini";
+
+        static public Color parseColor(string rawColorString)
+        {
+            if (rawColorString.ToLower().Equals("transparent"))
+            {
+                return Color.FromArgb(0, 0, 0, 0);
+            }
+            else if (rawColorString.Contains(","))
+            {
+                string[] s = rawColorString.Split(',');
+                if (s.Length == 3)
+                {
+                    return Color.FromArgb(int.Parse(s[0]), int.Parse(s[1]), int.Parse(s[2]));
+                }
+                else if (s.Length == 4)
+                {
+                    return Color.FromArgb(int.Parse(s[0]), int.Parse(s[1]), int.Parse(s[2]), int.Parse(s[3]));
+                }
+                throw new Exception("Invalid RGB string");
+            }
+            else {
+                return Color.FromName(rawColorString);
+            }
+        }
+
         // draw the brightness percentage to the tray icon, and update the tooltip label
         static public void updateNotifyIcon(NotifyIcon notifyIcon, int percentage)
         {
@@ -31,9 +54,34 @@ namespace BrightnessTray
                 return;
             }
 
+            Color _foreground;
+            Color _foregroundLight;
+            Color _background;
+            Color _backgroundLight;
+            if (File.Exists(INI_FILE))
+            {
+                IniFile inifile = new IniFile();
+                inifile.Load(INI_FILE);
+
+                _foreground = parseColor(inifile["icon"]["foreground"].GetString());
+                _foregroundLight = parseColor(inifile["lighticon"]["foreground"].GetString());
+                _background = parseColor(inifile["icon"]["background"].GetString());
+                _backgroundLight = parseColor(inifile["lighticon"]["background"].GetString());
+            }
+            else
+            {
+                _foreground = Color.White;
+                _foregroundLight = Color.Black;
+                _background = Color.Transparent;
+                _backgroundLight = Color.Transparent;
+            }
+
+            Color foreground = RegistryWatcher.getSystemUsesLightTheme() ? _foregroundLight : _foreground;
+            Color background = RegistryWatcher.getSystemUsesLightTheme() ? _backgroundLight : _background;
+
             string drawMe = percentage.ToString();
             Font fontToUse;
-            Brush brushToUse = new SolidBrush(Color.White);
+            Brush brushToUse = new SolidBrush(foreground);
             Rectangle rect;
             Bitmap bitmapText;
             Graphics g;
@@ -79,7 +127,10 @@ namespace BrightnessTray
             }
 
             g = Graphics.FromImage(bitmapText);
-            g.Clear(Color.Transparent);
+            using (SolidBrush brush = new SolidBrush(background))
+            {
+                g.FillRectangle(brush, 0, 0, 32, 32);
+            }
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;

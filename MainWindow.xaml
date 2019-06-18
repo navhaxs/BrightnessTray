@@ -42,7 +42,8 @@
                    Source="res/sun.png" Margin="0,0,0,15"
                    />
             <Label x:Name="percentageLabel" Content="0%" Margin="0,0,0,10" HorizontalAlignment="Center" Padding="0"/>
-            <Slider x:Name="BrightnessSlider" Orientation="Vertical" Height="200" HorizontalAlignment="Center" TickPlacement="Both" TickFrequency="10" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="1" LargeChange="10">
+            <Slider x:Name="BrightnessSlider" Orientation="Vertical" Height="200" HorizontalAlignment="Center" TickPlacement="Both" TickFrequency="10" Maximum="100" ValueChanged="Slider_ValueChanged" SmallChange="1" LargeChange="10"
+                    Value="{Binding BrightnessValue, Mode=TwoWay}">
                 <Slider.Style>
                     <Style TargetType="Slider">
                         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

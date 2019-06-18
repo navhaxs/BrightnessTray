@@ -48,6 +48,11 @@ namespace BrightnessTray
             eventWatcher = new BrightnessWatcher();
             eventWatcher.BrightnessChanged += EventWatcher_BrightnessChanged;
 
+            // set up Windows10 1903 taskbar theme change events
+            // TODO: Attach only if windows version matches
+            registryWatcher = new RegistryWatcher();
+            registryWatcher.OnUpdateStatus += RegistryWatcher_OnUpdateStatus;
+
             CreateNotifyIcon();
 
             this.Visibility = Visibility.Hidden;
@@ -56,6 +61,11 @@ namespace BrightnessTray
             {
                 percentageLabel.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void RegistryWatcher_OnUpdateStatus(object sender, string e)
+        {
+            DrawIcon.updateNotifyIcon(NotifyIcon, WmiFunctions.GetBrightnessLevel());
         }
 
         /// <summary>
@@ -73,18 +83,22 @@ namespace BrightnessTray
             // needs to be IsMouseOver for entire form in case of scroll wheel.
             if (!IsMouseOver && !isKeyDown)
             {
-                this.Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    int value = int.Parse(e.newBrightness.ToString());
-
-                    // 0 <= value <= 100
-
-                    this.BrightnessSlider.Value = value;
-                    this.percentageLabel.Content = value.ToString() + "%";
-                    DrawIcon.updateNotifyIcon(NotifyIcon, value);
-
-                }));
+                UpdateUI(int.Parse(e.newBrightness.ToString()));
             }
+        }
+
+        private void UpdateUI(int brightnessValue)
+        {
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                // 0 <= value <= 100
+
+                ignoreValueChanged = true;
+                this.BrightnessSlider.Value = brightnessValue;
+                ignoreValueChanged = false;
+                this.percentageLabel.Content = brightnessValue.ToString() + "%";
+                DrawIcon.updateNotifyIcon(NotifyIcon, brightnessValue);
+            }));
         }
 
         /// <summary>
@@ -96,6 +110,11 @@ namespace BrightnessTray
         /// Listener to backlight change events from WMI.
         /// </summary>
         BrightnessWatcher eventWatcher;
+
+        /// <summary>
+        /// Listener to backlight change events from WMI.
+        /// </summary>
+        RegistryWatcher registryWatcher;
         
         /// <summary>
         /// Delegate for handling user preference changes (namely desktop preference changes).
@@ -143,6 +162,11 @@ namespace BrightnessTray
         /// The autostart menu item (exists as a local variable so that the checked state can be toggled).
         /// </summary>
         private System.Windows.Forms.MenuItem mnuAutostart;
+
+        /// <summary>
+        /// Don't trigger a WMI brightness change action, if the value update itself was *from* WMI
+        /// </summary>
+        private bool ignoreValueChanged = false;       
 
         /// <summary>
         /// Updates the display (position and appearance) of the window if it is currently visible.
@@ -455,8 +479,9 @@ namespace BrightnessTray
         {
 
             // update the slider to the current brightness
-            var currentBrightness = WmiFunctions.GetBrightnessLevel();
-            BrightnessSlider.Value = currentBrightness;
+            ignoreValueChanged = true;
+            UpdateUI(WmiFunctions.GetBrightnessLevel());
+            ignoreValueChanged = false;
 
             if (!Compatibility.IsDWMEnabled) {
                 this.SetNonGlassBorder(true);
@@ -490,7 +515,7 @@ namespace BrightnessTray
             System.Windows.Forms.MenuItem mnuMonitorOff = new System.Windows.Forms.MenuItem("Power off display", new EventHandler(this.MonitorOffMenuEventHandler));
             System.Windows.Forms.MenuItem mnuScreenSaver = new System.Windows.Forms.MenuItem("Start screen saver", new EventHandler(this.StartScreenSaverMenuEventHandler));
             System.Windows.Forms.MenuItem mnuSleep = new System.Windows.Forms.MenuItem("Enter sleep mode", new EventHandler(this.SleepMenuEventHandler));
-            System.Windows.Forms.MenuItem mnuCaffeine = new System.Windows.Forms.MenuItem("Caffiene", new EventHandler(this.CaffeineMenuEventHandler));
+            System.Windows.Forms.MenuItem mnuCaffeine = new System.Windows.Forms.MenuItem("Caffeine", new EventHandler(this.CaffeineMenuEventHandler));
             mnuAutostart = new System.Windows.Forms.MenuItem("Autostart", new EventHandler(this.AutostartMenuEventHandler));
             mnuAutostart.Checked = Autostart.CheckStartupFolderShortcutsExists();
 
@@ -598,6 +623,9 @@ namespace BrightnessTray
             if (this.Visibility != Visibility.Visible)
                 return;
 
+            if (ignoreValueChanged)
+                return;
+            
             var newBrightness = (int) e.NewValue;
 
             // Change the brightness in a background thread to avoid UI blocking

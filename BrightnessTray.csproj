@@ -125,8 +125,10 @@
     <Compile Include="Caffeine.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DrawIcon.cs" />
+    <Compile Include="IniFile.cs" />
     <Compile Include="MonitorOff.cs" />
     <Compile Include="EventWatcherAsync.cs" />
+    <Compile Include="RegistryWatcher.cs" />
     <Compile Include="WindowPositioning.cs" />
     <Compile Include="WmiFunctions.cs" />
     <Page Include="MainWindow.xaml">
