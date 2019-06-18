@@ -20,7 +20,7 @@ Use your mouse/scroll wheel!
 
 - Show a static icon in the tray with the `/NoTextIcon` launch parameter
 - Hide the brightness text label in the fly-out window with the `/NoPercentageText` launch parameter
-- Customise the tray icon text colours using `BrightnessTray.ini`
+- Customise the tray icon text colours using `BrightnessTray.ini` using either color name strings or ARGB format (0-255 values)
 
 ```
 [icon]
