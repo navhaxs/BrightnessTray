@@ -11,31 +11,6 @@ namespace BrightnessTray
 {
     class DrawIcon
     {
-        const string INI_FILE = "BrightnessTray.ini";
-
-        static public Color parseColor(string rawColorString)
-        {
-            if (rawColorString.ToLower().Equals("transparent"))
-            {
-                return Color.FromArgb(0, 0, 0, 0);
-            }
-            else if (rawColorString.Contains(","))
-            {
-                string[] s = rawColorString.Split(',');
-                if (s.Length == 3)
-                {
-                    return Color.FromArgb(int.Parse(s[0]), int.Parse(s[1]), int.Parse(s[2]));
-                }
-                else if (s.Length == 4)
-                {
-                    return Color.FromArgb(int.Parse(s[0]), int.Parse(s[1]), int.Parse(s[2]), int.Parse(s[3]));
-                }
-                throw new Exception("Invalid RGB string");
-            }
-            else {
-                return Color.FromName(rawColorString);
-            }
-        }
 
         // draw the brightness percentage to the tray icon, and update the tooltip label
         static public void updateNotifyIcon(NotifyIcon notifyIcon, int percentage)
@@ -53,31 +28,9 @@ namespace BrightnessTray
                 iconstream.Close();
                 return;
             }
-
-            Color _foreground;
-            Color _foregroundLight;
-            Color _background;
-            Color _backgroundLight;
-            if (File.Exists(INI_FILE))
-            {
-                IniFile inifile = new IniFile();
-                inifile.Load(INI_FILE);
-
-                _foreground = parseColor(inifile["icon"]["foreground"].GetString());
-                _foregroundLight = parseColor(inifile["lighticon"]["foreground"].GetString());
-                _background = parseColor(inifile["icon"]["background"].GetString());
-                _backgroundLight = parseColor(inifile["lighticon"]["background"].GetString());
-            }
-            else
-            {
-                _foreground = Color.White;
-                _foregroundLight = Color.Black;
-                _background = Color.Transparent;
-                _backgroundLight = Color.Transparent;
-            }
-
-            Color foreground = RegistryWatcher.getSystemUsesLightTheme() ? _foregroundLight : _foreground;
-            Color background = RegistryWatcher.getSystemUsesLightTheme() ? _backgroundLight : _background;
+            
+            Color foreground = RegistryWatcher.getSystemUsesLightTheme() ? Config.ForegroundLight : Config.Foreground;
+            Color background = RegistryWatcher.getSystemUsesLightTheme() ? Config.BackgroundLight : Config.Background;
 
             string drawMe = percentage.ToString();
             Font fontToUse;
